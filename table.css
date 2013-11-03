@@ -1,0 +1,133 @@
+
+TABLE.tasks {
+ border-collapse:collapse;
+}
+
+TABLE.tasks TH {
+ font-size: 10pt;
+ font-weight: bold;
+ text-align: left;
+ color: white;
+ background-color: black;
+ border: 1px solid black;
+ padding: 4px;
+}
+
+TABLE.tasks TR {
+ font-size: 10pt;
+ border: 1px solid lightgray;
+ padding: 2px;
+ text-align: left;
+}
+
+TABLE.tasks TD {
+ font-size: 10pt;
+ padding: 2px;
+ text-align: left;
+}
+
+TABLE.tasks TR.important TD {
+ background-color: #CC3333;
+ color: white;
+ font-size: 10;
+ font-weight: bold;
+ padding: 2px;
+ text-align: left;
+}
+
+TABLE.tasks TR.yesterday TD {
+ background-color: #FFFFAA;
+ font-size: 10;
+ padding: 2px;
+ text-align: left;
+}
+
+TABLE.taskinfo TD {
+ font-size: 10pt;
+ padding: 2px;
+ border: 1px solid black;
+ text-align: left;
+}
+
+TABLE.tasks TR:hover { background-color: lightgray; } 
+TABLE.tasks TR.yesterday:hover { background-color: lightgray; } 
+TABLE.tasks TR.important:hover { background-color: lightgray; } 
+
+
+TABLE.notes {
+ border-collapse:collapse;
+}
+
+TABLE.notes TH {
+ font-size: 10pt;
+ font-weight: bold;
+ text-align: left;
+ color: white;
+ background-color: black;
+ border: 1px solid black;
+ padding: 4px;
+}
+
+TABLE.notes TR {
+ font-size: 12pt;
+ border: 1px solid lightgray;
+ padding: 2px;
+ text-align: left;
+}
+
+TABLE.notes TD {
+ font-size: 10pt;
+ padding: 2px;
+ text-align: left;
+}
+
+TABLE.notes TR.text TD {
+ background-color: #FFFFDD;
+ font-size: 8pt;
+ padding: 2px;
+ text-align: left;
+}
+
+TABLE.notes TR.important TD {
+ background-color: #CC3333;
+ color: white;
+ font-size: 10;
+ padding: 2px;
+ text-align: left;
+}
+
+TABLE.project {
+ border-collapse:collapse;
+}
+
+TABLE.project TH {
+ font-size: 10pt;
+ font-weight: bold;
+ text-align: left;
+ color: white;
+ background-color: black;
+ border: 1px solid black;
+ padding: 4px;
+}
+
+TABLE.project TR {
+ font-size: 12pt;
+ border: 1px solid lightgray;
+ padding: 2px;
+ text-align: left;
+}
+
+TABLE.project TD {
+ font-size: 10pt;
+ padding: 2px;
+ text-align: left;
+}
+
+TABLE.project TR.title TD {
+ background-color: #FFFFDD;
+ font-size: 10pt;
+ padding: 2px;
+ text-align: left;
+ font-weight: bold;
+}
+
