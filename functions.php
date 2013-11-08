@@ -14,15 +14,7 @@ function html_top($current) {
 	<link href="style.css" rel="stylesheet" type="text/css" />
 	<link href="table.css" rel="stylesheet" type="text/css" />
 	<link href="button.css" rel="stylesheet" type="text/css" />
-	<!--[if IE]>
-		<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-	<![endif]-->
-	<!--[if IE 6]>
-		<script src="../js/belatedPNG.js"></script>
-		<script>
-			DD_belatedPNG.fix('*');
-		</script>
-	<![endif]-->
+
 	<script src="../js/jquery-1.4.min.js" type="text/javascript" charset="utf-8"></script>
 	<script src="../js/loopedslider.js" type="text/javascript" charset="utf-8"></script>
 	<script type="text/javascript" charset="utf-8">
@@ -103,11 +95,6 @@ function html_top($current) {
 #}
 
 ?>
-<!--
-<FORM METHOD="LINK" ACTION="page1.htm">
-<INPUT TYPE="submit" VALUE="Clickable Button">
-</FORM>
---!>
 <section id="contentwrap">
 	<div id="contents">
 	<div id="topcolumns">

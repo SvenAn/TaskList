@@ -17,9 +17,15 @@ function db_connect() {
 function print_tasks($task, $alt) {
     foreach ( $task as $j ) {
         if ( ($j[important] == 'y' && $alt == 'important') || ($j[important] == 'n' && $alt != 'important')) {
-            echo "\t<tr class=\"$alt\">\n";
-            #echo "\t\t<td width=1><a href=\"?submit=Important&id=$j[id]&state=$j[important]\">" . 
-            #"<img src=\"images/important.png\"</a></td>\n";
+            echo "\t<tr class=\"$alt\" div id=\"myDiv\">\n";
+
+#            echo "\t\t<td width=1><a href=\"?submit=Important&id=$j[id]&state=$j[important]\">" . 
+#            "<img src=\"images/important.png\"</a></td>\n";
+
+#            echo "<div id=\"myDiv\">";
+
+#            echo "<td width=1><a href=\"javascript:void(0)\" onclick=\"loadXMLDoc()\"><img src=\"images/settings.png\"></a></td>";
+
             echo "\t\t<td width=1><a href=\"javascript:void(0)\" onClick=\"".
                 "window.open('adjust_task.php?id=$j[id]','','toolbar=no,".
                 "directories=no, location=no, status=no, menubar=no, resizable=no,".
@@ -27,16 +33,16 @@ function print_tasks($task, $alt) {
                 "tleft=300')\"><img src=\"images/settings.png\"></a></td>\n";
             if ( $alt == 'yesterday' ) {
                 echo "\t\t<td width=1><a href=\"".$_SERVER['PHP_SELF']."?submit=Today&id=$j[id]\">".
-                "<img src=\"images/today.png\"</a></td>\n";
+                "<img src=\"images/today.png\"></a></td>\n";
 
             }
             else {
                 echo "\t\t<td width=1><a href=\"".$_SERVER['PHP_SELF']."?submit=NextDay&id=$j[id]\">".
-                "<img src=\"images/next-day.png\"</a></td>\n";
+                "<img src=\"images/next-day.png\"></a></td>\n";
             }
             echo "\t\t<td class=\"alt\">$j[task_description]</td>\n";
             echo "\t\t<td width=1><a href=\"".$_SERVER['PHP_SELF']."?submit=TaskDone&id=$j[id]\">".
-            "<img src=\"images/done.png\"</a></td>\n";
+            "<img src=\"images/done.png\"></a></td>\n";
             echo "\t</tr>\n";
         }
     }
@@ -66,13 +72,13 @@ function print_today_task_table()  {
 
     #Creating table header.
     echo "<table class=\"tasks\" width=\"100%\" height=\"100%\" align=\"center\">\n";
-    echo "<th colspan=\"5\">Tasks due today or earlier:</th>\n";
+    echo "<tr><th colspan=\"5\">Tasks due today or earlier:</th></tr>\n";
 
     print_tasks($yesterdays_task, "important");
     print_tasks($todays_task, "important");
 
     print_tasks($yesterdays_task, "yesterday");
-    print_tasks($todays_task);
+    print_tasks($todays_task, "today");
 
     echo "</table>\n";
 
@@ -152,6 +158,41 @@ function print_new_project_field() {
     echo "</form>";
 }
 
+function print_task_description( $id, $alt ) {
+    $query = "SELECT id,task_description,important FROM tasks where id = 19";
+    $todays_task = get_table( $query );
+    #Creating table header.
+    echo "<table class=\"tasks\" width=\"100%\" height=\"100%\" align=\"center\">\n";
+    echo "<th colspan=\"5\">Task:</th>\n";
+
+#    print_tasks($todays_task);
+           echo "\t<tr class=\"$alt\">\n";
+            #echo "\t\t<td width=1><a href=\"?submit=Important&id=$j[id]&state=$j[important]\">" . 
+            #"<img src=\"images/important.png\"</a></td>\n";
+            echo "\t\t<td width=1><a href=\"javascript:void(0)\" onClick=\"".
+                "window.open('adjust_task.php?id=$id','','toolbar=no,".
+                "directories=no, location=no, status=no, menubar=no, resizable=no,".
+                " scrollbars=no, width=1000, height=350,".
+                "tleft=300')\"><img src=\"images/settings.png\"></a></td>\n";
+            if ( $alt == 'yesterday' ) {
+                echo "\t\t<td width=1><a href=\"".$_SERVER['PHP_SELF']."?submit=Today&id=$j[id]\">".
+                "<img src=\"images/today.png\"</a></td>\n";
+
+            }
+            else {
+                echo "\t\t<td width=1><a href=\"".$_SERVER['PHP_SELF']."?submit=NextDay&id=$j[id]\">".
+                "<img src=\"images/next-day.png\"</a></td>\n";
+            }
+            echo "\t\t<td class=\"alt\">$todays_task[task_description]</td>\n";
+            echo "\t\t<td width=1><a href=\"".$_SERVER['PHP_SELF']."?submit=TaskDone&id=$j[id]\">".
+            "<img src=\"images/done.png\"</a></td>\n";
+            echo "\t</tr>\n";
+
+
+    echo "</table>\n";
+
+    mysql_free_result($result);
+}
 
 function db_close() {
 	mysql_close($dbconn);

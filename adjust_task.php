@@ -1,10 +1,12 @@
 <?
 
 require("functions.php");
+require("db_functions.php");
 require("php_calendar.php");
 
 $id = filter_input(INPUT_GET,'id', FILTER_SANITIZE_STRING);
 
+db_connect();
 
 ?>
 <!doctype html>
@@ -42,6 +44,8 @@ $days[$today] = array(NULL,NULL,'<span style="color: red; font-weight: bold; fon
 for ( $i=$today+1; $i<=$days_this_month; $i++ ) {
         $days[$i] = array('index.php','linked-day');
 }
+
+print_task_description( $id );
 
 echo "<table class=\"task\"><tr><th>Header</th></tr>";
 echo "<tr><td>";
