@@ -11,6 +11,7 @@ $submit = filter_input(INPUT_GET,'submit', FILTER_SANITIZE_STRING);
 $newtask = filter_input(INPUT_GET,'NewTask', FILTER_SANITIZE_STRING);
 $id = filter_input(INPUT_GET,'id', FILTER_SANITIZE_STRING);
 $state = filter_input(INPUT_GET,'state', FILTER_SANITIZE_STRING);
+$table = filter_input(INPUT_GET,'table', FILTER_SANITIZE_STRING);
 
 db_connect();
 
@@ -65,9 +66,15 @@ if ( $submit == 'On_hold' ) {
         reloadpage( $url );
 }
 
-html_top('home');
+if ( ! $table ) {
+    html_top('home');
+}
+
+echo "<div id=TableDiv>\n";
 
 print_today_task_table();
+
+echo "</div>\n";
 
 mysql_free_result($result);
 
@@ -77,6 +84,9 @@ print_new_task_field();
 
 db_close();
 
-html_bottom();
+
+if ( ! $table ) {
+    html_bottom();
+}
 ?>
 

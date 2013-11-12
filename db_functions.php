@@ -15,11 +15,9 @@ function db_connect() {
 
 
 function print_tasks( $task, $alt, $expand, $url="none" ) {
-
     if ( $url == "none" ) {
         $url = $_SERVER['PHP_SELF'];
     }
-
     foreach ( $task as $j ) {
         if ( ($j[important] == 'y' && $alt == 'important') || ($j[important] == 'n' && $alt != 'important')) {
             echo "\t<tr class=\"$alt\">\n";
@@ -27,7 +25,7 @@ function print_tasks( $task, $alt, $expand, $url="none" ) {
             if ( $j[id] == $expand ) {
 
                 echo "\t\t<td width=1><a href=\"javascript:void(0)\" onClick=\"loadXMLDoc()\"".
-                    "><img src=\"images/settings.png\"></a><br></td>\n";
+                    "><img src=\"images/retract.png\"></a><br></td>\n";
     
                 if ( $alt == 'yesterday' ) {
                 echo "\t\t<td width=1><a href=\"".$url."?submit=Today&id=$j[id]\">".
@@ -61,20 +59,20 @@ function print_tasks( $task, $alt, $expand, $url="none" ) {
 
             else {
                 echo "\t\t<td width=1><a href=\"javascript:void(0)\" onClick=\"loadXMLDoc($j[id])\"".
-                    "><img src=\"images/settings.png\"></a></td>\n";
+                    "><img src=\"images/expand.png\"></a></td>\n";
     
                 if ( $alt == 'yesterday' ) {
-                    echo "\t\t<td width=1><a href=\"".$_SERVER['PHP_SELF']."?submit=Today&id=$j[id]\">".
+                    echo "\t\t<td width=1><a href=\"".$url."?submit=Today&id=$j[id]\">".
                     "<img src=\"images/today.png\"></a></td>\n";
                 }
                 else {
-                    echo "\t\t<td width=1><a href=\"".$_SERVER['PHP_SELF']."?submit=NextDay&id=$j[id]\">".
+                    echo "\t\t<td width=1><a href=\"".$url."?submit=NextDay&id=$j[id]\">".
                     "<img src=\"images/next-day.png\"></a></td>\n";
                 }
 
                 echo "\t\t<td class=\"alt\">$j[task_description]</td>\n";
 
-                echo "\t\t<td width=1><a href=\"".$_SERVER['PHP_SELF']."?submit=TaskDone&id=$j[id]\">".
+                echo "\t\t<td width=1><a href=\"".$url."?submit=TaskDone&id=$j[id]\">".
                     "<img src=\"images/done.png\"></a></td>\n";
                 echo "\t</tr>\n";
             }
@@ -105,7 +103,6 @@ function print_today_task_table( $expand="0", $url="none" )  {
     $yesterdays_task = get_table( $query );
 
     #Creating table header.
-    echo "<div id=TableDiv>\n"; 
     echo "<table class=\"tasks\" width=\"100%\" height=\"100%\" align=\"center\">\n";
     echo "<tr><th colspan=\"5\">Tasks due today or earlier:</th></tr>\n";
 
@@ -116,7 +113,42 @@ function print_today_task_table( $expand="0", $url="none" )  {
     print_tasks( $todays_task, "none", $expand, $url );
 
     echo "</table>\n";
-    echo "</div>\n";
+
+    mysql_free_result($result);
+}
+
+
+function print_tomorrows_task_table( $expand="0", $url="none" )  {
+
+    $query = 'SELECT id,task_description,important FROM tasks where isnull(solved_date) and due_date>CURDATE() and isnull(On_Hold)';
+    $tomorrows_tasks = get_table( $query );
+
+    #Creating table header.
+    echo "<table class=\"tasks\" width=\"100%\" height=\"100%\" align=\"center\">\n";
+    echo "<tr><th colspan=\"5\">Tasks due tomorrow or later:</th></tr>\n";
+
+    print_tasks( $tomorrows_tasks, "important", $expand, $url );
+    print_tasks( $tomorrows_tasks, "none", $expand, $url );
+
+    echo "</table>\n";
+
+    mysql_free_result($result);
+}
+
+
+function print_tasks_on_hold_table( $expand="0", $url="none" )  {
+
+    $query = 'SELECT id,task_description,important FROM tasks where isnull(solved_date) and NOT isnull(On_Hold)';
+    $tasks_on_hold = get_table( $query );
+
+    #Creating table header.
+    echo "<table class=\"tasks\" width=\"100%\" height=\"100%\" align=\"center\">\n";
+    echo "<tr><th colspan=\"5\">Tasks on hold:</th></tr>\n";
+
+    print_tasks( $tasks_on_hold, "important", $expand, $url );
+    print_tasks( $tasks_on_hold, "none", $expand, $url );
+
+    echo "</table>\n";
 
     mysql_free_result($result);
 }

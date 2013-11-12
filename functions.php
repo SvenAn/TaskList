@@ -32,7 +32,7 @@ function html_top($current) {
             xmlhttp=new XMLHttpRequest();
             xmlhttp.onreadystatechange=function() {
                 if (xmlhttp.readyState==4 && xmlhttp.status==200) {
-                    document.getElementById("TableDiv").innerHTML=xmlhttp.responseText;
+                    document.getElementById( "TableDiv" ).innerHTML=xmlhttp.responseText;
                 }
             }
             xmlhttp.open("GET","table.php?id=" + Myid, true);
