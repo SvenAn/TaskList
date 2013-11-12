@@ -25,6 +25,21 @@ function html_top($current) {
 			});
 		});
 	</script>
+
+    <script>
+        function loadXMLDoc(Myid) {
+            var xmlhttp;
+            xmlhttp=new XMLHttpRequest();
+            xmlhttp.onreadystatechange=function() {
+                if (xmlhttp.readyState==4 && xmlhttp.status==200) {
+                    document.getElementById( "TableDiv" ).innerHTML=xmlhttp.responseText;
+                }
+            }
+            xmlhttp.open("GET","table.php?id=" + Myid, true);
+            xmlhttp.send();
+        }
+    </script>
+
 </head>
 
 <body class="normalpage">

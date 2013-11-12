@@ -127,19 +127,33 @@ elseif ( $submit == 'DeleteConfirmed' ) {
 	$result = mysql_query($query) or die('Query failed: ' . mysql_error());
 }
 
-print_projects();
+#print_projects();
+#
+#if ( $submit == 'newproj' ) {
+#    print_new_project_field();
+#}
+#else {
+#    echo "<tr><td colspan=\"4\"><a href=\"planner.php?submit=newproj\">New project</a></td></tr>";
+#}
+#
+#echo "<br><br>";
+#echo "<br><br>";
 
-if ( $submit == 'newproj' ) {
-    print_new_project_field();
-}
-else {
-    echo "<tr><td colspan=\"4\"><a href=\"planner.php?submit=newproj\">New project</a></td></tr>";
-}
+#print_unassigned_tasks();
+
+echo "<div id=TableDiv>\n";
+
+print_today_task_table();
 
 echo "<br><br>";
+
+print_tomorrows_task_table();
+
 echo "<br><br>";
 
-print_unassigned_tasks();
+print_tasks_on_hold_table();
+
+echo "</div>\n";
 
 db_close();
 
