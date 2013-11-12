@@ -24,7 +24,7 @@ function print_tasks( $task, $alt, $expand, $url="none" ) {
 
             if ( $j[id] == $expand ) {
 
-                echo "\t\t<td width=1><a href=\"javascript:void(0)\" title='Less options' onClick=\"loadXMLDoc()\"".
+                echo "\t\t<td width=1><a href=\"javascript:void(0)\" title='Less options' onClick=\"loadXMLDoc( '$url', 0, '' )\"".
                     "><img src=\"images/Retract.png\"></a><br></td>\n";
     
                 if ( $alt == 'yesterday' ) {
@@ -60,7 +60,7 @@ function print_tasks( $task, $alt, $expand, $url="none" ) {
             #    "tleft=300')\"><img src=\"images/settings.png\"></a></td>\n";
 
             else {
-                echo "\t\t<td width=1><a href=\"javascript:void(0)\" onClick=\"loadXMLDoc($j[id])\"".
+                echo "\t\t<td width=1><a href=\"javascript:void(0)\" onClick=\"loadXMLDoc( '$url', $j[id], '')\" ".
                     "title='More options'><img src=\"images/Expand.png\"></a></td>\n";
     
                 if ( $alt == 'yesterday' ) {
@@ -68,7 +68,8 @@ function print_tasks( $task, $alt, $expand, $url="none" ) {
                     "<img src=\"images/Today.gif\"></a></td>\n";
                 }
                 else {
-                    echo "\t\t<td width=1><a href=\"".$url."?submit=NextDay&id=$j[id]\" title='Get task done tomorrow'>".
+#                    echo "\t\t<td width=1><a href=\"".$url."?submit=NextDay&id=$j[id]\" title='Get task done tomorrow'>".
+                    echo "\t\t<td width=1><a href=\"javascript:void(0)\" onClick=\"loadXMLDoc('$url', $j[id], '&submit=NextDay')\" title='Get task done tomorrow'>".
                     "<img src=\"images/NextDay.gif\"></a></td>\n";
                 }
 
@@ -226,6 +227,32 @@ function print_new_project_field() {
     echo "   </table>";
     echo "</form>";
 }
+
+
+function check_submits( $mysubmit='none', $id=0, $importantstate='0' ) {
+    if ( $mysubmit != 'none' && $id !=0 ) {
+
+        if ( $submit == 'Important' ) {
+            if ( $importantstate == 'n' ) {
+                $query = "update tasks set important='y' where id=$id";
+            }
+            elseif ( $importantstate == 'y' ) {
+                $query = "update tasks set important='n' where id=$id";
+            }
+            $result = mysql_query($query) or die('Query failed: ' . mysql_error());
+
+            reloadpage( $url );
+        }
+
+        if ( $submit == 'TaskDone' ) {
+            $query = "update tasks set solved_date=CURDATE() where id=$id";
+            $result = mysql_query($query) or die('Query failed: ' . mysql_error());
+
+            reloadpage( $url );
+        }
+    }
+}
+
 
 
 function db_close() {

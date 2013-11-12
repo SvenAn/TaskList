@@ -72,7 +72,7 @@ if ( ! $table ) {
 
 echo "<div id=TableDiv>\n";
 
-print_today_task_table();
+print_today_task_table( $id, "index.php" );
 
 echo "</div>\n";
 
@@ -80,12 +80,12 @@ mysql_free_result($result);
 
 echo "<br> <br>\n";
 
-print_new_task_field();
-
 db_close();
 
 
 if ( ! $table ) {
+    print_new_task_field();
+
     html_bottom();
 }
 ?>

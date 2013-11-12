@@ -27,7 +27,7 @@ function html_top($current) {
 	</script>
 
     <script>
-        function loadXMLDoc(Myid) {
+        function loadXMLDoc( Url, Myid, submit ) {
             var xmlhttp;
             xmlhttp=new XMLHttpRequest();
             xmlhttp.onreadystatechange=function() {
@@ -35,7 +35,7 @@ function html_top($current) {
                     document.getElementById( "TableDiv" ).innerHTML=xmlhttp.responseText;
                 }
             }
-            xmlhttp.open("GET","table.php?id=" + Myid, true);
+            xmlhttp.open("GET", "?" + Url + "&table='yes'&id=" + Myid + submit , true);
             xmlhttp.send();
         }
     </script>
