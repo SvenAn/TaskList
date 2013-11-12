@@ -24,30 +24,32 @@ function print_tasks( $task, $alt, $expand, $url="none" ) {
 
             if ( $j[id] == $expand ) {
 
-                echo "\t\t<td width=1><a href=\"javascript:void(0)\" onClick=\"loadXMLDoc()\"".
-                    "><img src=\"images/retract.png\"></a><br></td>\n";
+                echo "\t\t<td width=1><a href=\"javascript:void(0)\" title='Less options' onClick=\"loadXMLDoc()\"".
+                    "><img src=\"images/Retract.png\"></a><br></td>\n";
     
                 if ( $alt == 'yesterday' ) {
-                echo "\t\t<td width=1><a href=\"".$url."?submit=Today&id=$j[id]\">".
-                "<img src=\"images/today.png\"></a>\n";
+                    echo "\t\t<td width=1><a href=\"".$url."?submit=Today&id=$j[id]\" title='Get task done today'><img src=\"images/Today.gif\"></a>\n";
 
                 }
                 else {
-                    echo "\t\t<td width=1><a href=\"".$url."?submit=NextDay&id=$j[id]\">".
-                    "<img src=\"images/next-day.png\"></a>\n";
+                    echo "\t\t<td width=1><a href=\"".$url."?submit=NextDay&id=$j[id]\" title='Postpone task until tomorrow'><img src=\"images/NextDay.gif\"></a>\n";
                 }
 
-                echo "\t\t<a href=\"?submit=Important&id=$j[id]&state=$j[important]\">" . 
-                "<img src=\"images/important.png\"</a><br>\n";
+                echo "\t\t<a href=\"?submit=Important&id=$j[id]&state=$j[important]\" title='Toggle importance'><img src=\"images/Important.png\"</a><br>\n";
 
                 echo "</td>\n";
 
-                echo "\t\t<td class=\"alt\">$j[task_description]<br>\n" .
-                     "<a class=\"button\" href=\"javascript:var URL = 'index.php?submit=On_hold&id=".$id."';" .
-                     "window.opener.location.href = URL; window.close()\"><span>H</span></a></td>";
+                echo "\t\t<td class=\"alt\">$j[task_description]<br>\n";
+#                     "<a class=\"button\" href=\"javascript:var URL = 'index.php?submit=On_hold&id=".$id."';" .
+#                     "window.opener.location.href = URL; window.close()\"><span>H</span></a></td>";
+                if ( $alt == 'yesterday' ) {
+                    echo "\t\t<a href=\"".$url."?submit=NextDay&id=$j[id]\" title='Postpone task until tomorrow'><img src=\"images/NextDay.gif\"></a>\n";
+                }
+#                echo "\t\t<a href=\"".$url."?submit=NextDay&id=$j[id]\"><img src=\"images/NextDay.gif\"></a>\n";
+                echo "\t\t<a href=\"".$url."?submit=NextWeek&id=$j[id]\" title='Get task done next week'><img src=\"images/NextWeek.gif\"></a>\n";
+                echo "\t\t<a href=\"?submit=On_hold&id=$j[id]\" title='Put task on Hold'><img src=\"images/Hold.png\"</a>\n";
 
-                echo "\t\t<td width=1><a href=\"".$url."?submit=TaskDone&id=$j[id]\">".
-                    "<img src=\"images/done.png\"></a></td>\n";
+                echo "\t\t<td width=1><a href=\"".$url."?submit=TaskDone&id=$j[id]\"><img src=\"images/done.png\"></a></td>\n";
 
             }
 
@@ -59,15 +61,15 @@ function print_tasks( $task, $alt, $expand, $url="none" ) {
 
             else {
                 echo "\t\t<td width=1><a href=\"javascript:void(0)\" onClick=\"loadXMLDoc($j[id])\"".
-                    "><img src=\"images/expand.png\"></a></td>\n";
+                    "title='More options'><img src=\"images/Expand.png\"></a></td>\n";
     
                 if ( $alt == 'yesterday' ) {
-                    echo "\t\t<td width=1><a href=\"".$url."?submit=Today&id=$j[id]\">".
-                    "<img src=\"images/today.png\"></a></td>\n";
+                    echo "\t\t<td width=1><a href=\"".$url."?submit=Today&id=$j[id]\" title='Get task done today'>".
+                    "<img src=\"images/Today.gif\"></a></td>\n";
                 }
                 else {
-                    echo "\t\t<td width=1><a href=\"".$url."?submit=NextDay&id=$j[id]\">".
-                    "<img src=\"images/next-day.png\"></a></td>\n";
+                    echo "\t\t<td width=1><a href=\"".$url."?submit=NextDay&id=$j[id]\" title='Get task done tomorrow'>".
+                    "<img src=\"images/NextDay.gif\"></a></td>\n";
                 }
 
                 echo "\t\t<td class=\"alt\">$j[task_description]</td>\n";

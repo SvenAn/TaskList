@@ -27,10 +27,9 @@ TABLE.tasks TD {
 }
 
 TABLE.tasks TR.important TD {
- background-color: #CC3333;
- color: white;
+ background-color: #DE7373;
+ color: black;
  font-size: 10;
- font-weight: bold;
  padding: 2px;
  text-align: left;
 }
@@ -50,8 +49,8 @@ TABLE.taskinfo TD {
 }
 
 TABLE.tasks TR:hover { background-color: lightgray; } 
-TABLE.tasks TR.yesterday:hover { background-color: lightgray; } 
-TABLE.tasks TR.important:hover { background-color: lightgray; } 
+TABLE.tasks TR.yesterday:hover TD { background-color: yellow; } 
+TABLE.tasks TR.important:hover TD { background-color: #E84F4F; } 
 
 
 TABLE.notes {
