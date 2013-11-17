@@ -13,7 +13,9 @@ $id = filter_input(INPUT_GET,'id', FILTER_SANITIZE_STRING);
 $state = filter_input(INPUT_GET,'state', FILTER_SANITIZE_STRING);
 $table = filter_input(INPUT_GET,'table', FILTER_SANITIZE_STRING);
 
+
 db_connect();
+
 
 if ( $submit == 'Important' ) {
 	if ( $state == 'n' ) {
@@ -47,8 +49,8 @@ if ( $newtask ) {
 if ( $submit == 'Today' ) {
         $query = "update tasks set due_date=CURDATE() where id=$id";
         $result = mysql_query($query) or die('Query failed: ' . mysql_error());
-
-        reloadpage( $url );
+        $id = 0;
+#        reloadpage( $url );
 }
 
 
@@ -76,7 +78,7 @@ print_today_task_table( $id, "index.php" );
 
 echo "</div>\n";
 
-mysql_free_result($result);
+#mysql_free_result($result);
 
 echo "<br> <br>\n";
 

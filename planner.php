@@ -3,6 +3,9 @@
 require("functions.php");
 require("db_functions.php");
 
+
+$url='planner.php';
+
 #Checking for input data:
 $submit = filter_input(INPUT_GET,'submit', FILTER_SANITIZE_STRING);
 $table = filter_input(INPUT_GET,'table', FILTER_SANITIZE_STRING);
@@ -20,6 +23,8 @@ check_submits( $submit, $id, $state );
 if ( ! $table ) {
     html_top('planner');
 }
+
+echo "<div id=TableDiv>\n";
 
 print_today_task_table( $id, 'planner.php' );
 

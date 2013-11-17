@@ -35,7 +35,7 @@ function html_top($current) {
                     document.getElementById( "TableDiv" ).innerHTML=xmlhttp.responseText;
                 }
             }
-            xmlhttp.open("GET", "?" + Url + "&table='yes'&id=" + Myid + submit , true);
+            xmlhttp.open("GET", Url + "?table='yes'&id=" + Myid + submit , true);
             xmlhttp.send();
         }
     </script>

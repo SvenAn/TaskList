@@ -2,83 +2,72 @@
 
 
 
-
 function db_connect() {
     $dbconn = mysql_connect('localhost', 'tl_user', 'hegemor123');
     if (!$dbconn) {
         die('Could not connect: ' . mysql_error());
     }
-    #echo 'Connected successfully';
-
     mysql_select_db('tasklist') or die('Could not select database');
 }
 
 
 function print_tasks( $task, $alt, $expand, $url="none" ) {
-    if ( $url == "none" ) {
-        $url = $_SERVER['PHP_SELF'];
-    }
+    if ( $url == "none" ) { $url = $_SERVER['PHP_SELF']; }
+
     foreach ( $task as $j ) {
-        if ( ($j[important] == 'y' && $alt == 'important') || ($j[important] == 'n' && $alt != 'important')) {
+        if ( ($j['important'] == 'y' && $alt == 'important') || ($j['important'] == 'n' && $alt != 'important')) {
             echo "\t<tr class=\"$alt\">\n";
 
-            if ( $j[id] == $expand ) {
-
+            if ( $j['id'] == $expand ) {
+                # Print "Less options" button.
                 echo "\t\t<td width=1><a href=\"javascript:void(0)\" title='Less options' onClick=\"loadXMLDoc( '$url', 0, '' )\"".
-                    "><img src=\"images/Retract.png\"></a><br></td>\n";
-    
+                     "><img src=\"images/Retract.png\"></a><br></td>\n";
+                # Get task done today... 
                 if ( $alt == 'yesterday' ) {
-                    echo "\t\t<td width=1><a href=\"".$url."?submit=Today&id=$j[id]\" title='Get task done today'><img src=\"images/Today.gif\"></a>\n";
-
+                    echo "\t\t<td width=1><a href=\"javascript:void(0)\" onClick=\"loadXMLDoc( '$url', $j[id], '&submit=Today')\" ".
+                         "title='Get task done today'><img src=\"images/Today.gif\"></a>\n";
                 }
+                # ...or tomorrow.
                 else {
-                    echo "\t\t<td width=1><a href=\"".$url."?submit=NextDay&id=$j[id]\" title='Postpone task until tomorrow'><img src=\"images/NextDay.gif\"></a>\n";
+                    echo "\t\t<td width=1><a href=\"javascript:void(0)\" onClick=\"loadXMLDoc('$url', $j[id], '&submit=NextDay')\"" .
+                         "title='Get task done tomorrow'><img src=\"images/NextDay.gif\"></a>\n";
                 }
-
-                echo "\t\t<a href=\"?submit=Important&id=$j[id]&state=$j[important]\" title='Toggle importance'><img src=\"images/Important.png\"</a><br>\n";
-
-                echo "</td>\n";
-
+                # Print "Importance" button.
+                echo "\t\t<a href=\"javascript:void(0)\" onClick=\"loadXMLDoc('$url', $j[id], '&submit=Important&state=$j[important]')\"" .
+                     "title='Toggle importance'><img src=\"images/Important.png\"></a></td>\n";
+                # Print task description.
                 echo "\t\t<td class=\"alt\">$j[task_description]<br>\n";
-#                     "<a class=\"button\" href=\"javascript:var URL = 'index.php?submit=On_hold&id=".$id."';" .
-#                     "window.opener.location.href = URL; window.close()\"><span>H</span></a></td>";
+                # Print "postpone until tomorrow" button...
                 if ( $alt == 'yesterday' ) {
-                    echo "\t\t<a href=\"".$url."?submit=NextDay&id=$j[id]\" title='Postpone task until tomorrow'><img src=\"images/NextDay.gif\"></a>\n";
+                    echo "\t\t<a href=\"javascript:void(0)\" onClick=\"loadXMLDoc('$url', $j[id], '&submit=NextDay')\"" .
+                         "title='Get task done tomorrow'><img src=\"images/NextDay.gif\"></a>\n";
                 }
-#                echo "\t\t<a href=\"".$url."?submit=NextDay&id=$j[id]\"><img src=\"images/NextDay.gif\"></a>\n";
+                #Print "postpone until next week" button.
                 echo "\t\t<a href=\"".$url."?submit=NextWeek&id=$j[id]\" title='Get task done next week'><img src=\"images/NextWeek.gif\"></a>\n";
+                #Put task on hold.
                 echo "\t\t<a href=\"?submit=On_hold&id=$j[id]\" title='Put task on Hold'><img src=\"images/Hold.png\"</a>\n";
-
-                echo "\t\t<td width=1><a href=\"".$url."?submit=TaskDone&id=$j[id]\"><img src=\"images/done.png\"></a></td>\n";
-
             }
-
-            #echo "\t\t<td width=1><a href=\"javascript:void(0)\" onClick=\"".
-            #    "window.open('adjust_task.php?id=$j[id]','','toolbar=no,".
-            #    "directories=no, location=no, status=no, menubar=no, resizable=no,".
-            #    " scrollbars=no, width=1000, height=350,".
-            #    "tleft=300')\"><img src=\"images/settings.png\"></a></td>\n";
-
             else {
+                # Print "More options" button.
                 echo "\t\t<td width=1><a href=\"javascript:void(0)\" onClick=\"loadXMLDoc( '$url', $j[id], '')\" ".
-                    "title='More options'><img src=\"images/Expand.png\"></a></td>\n";
-    
+                     "title='More options'><img src=\"images/Expand.png\"></a></td>\n";
+                # Get task done today... 
                 if ( $alt == 'yesterday' ) {
-                    echo "\t\t<td width=1><a href=\"".$url."?submit=Today&id=$j[id]\" title='Get task done today'>".
-                    "<img src=\"images/Today.gif\"></a></td>\n";
+                    echo "\t\t<td width=1><a href=\"javascript:void(0)\" onClick=\"loadXMLDoc( '$url', $j[id], '&submit=Today')\" ".
+                         "title='Get task done today'><img src=\"images/Today.gif\"></a></td>\n";
                 }
+                # ...or tomorrow.
                 else {
-#                    echo "\t\t<td width=1><a href=\"".$url."?submit=NextDay&id=$j[id]\" title='Get task done tomorrow'>".
-                    echo "\t\t<td width=1><a href=\"javascript:void(0)\" onClick=\"loadXMLDoc('$url', $j[id], '&submit=NextDay')\" title='Get task done tomorrow'>".
-                    "<img src=\"images/NextDay.gif\"></a></td>\n";
+                    echo "\t\t<td width=1><a href=\"javascript:void(0)\" onClick=\"loadXMLDoc('$url', $j[id], '&submit=NextDay')\" " .
+                         "title='Get task done tomorrow'><img src=\"images/NextDay.gif\"></a></td>\n";
                 }
-
+                # Print task description.
                 echo "\t\t<td class=\"alt\">$j[task_description]</td>\n";
-
-                echo "\t\t<td width=1><a href=\"".$url."?submit=TaskDone&id=$j[id]\">".
-                    "<img src=\"images/done.png\"></a></td>\n";
-                echo "\t</tr>\n";
             }
+            #Print Done button.
+            echo "\t\t<td width=1><a href=\"javascript:void(0)\" onClick=\"loadXMLDoc( '$url', $j[id], '&submit=TaskDone')\" ".
+                 "title='Task done!'><img src=\"images/done.png\"></a></td>\n";
+            echo "\t</tr>\n";
         }
     }
 }
@@ -117,7 +106,8 @@ function print_today_task_table( $expand="0", $url="none" )  {
 
     echo "</table>\n";
 
-    mysql_free_result($result);
+#    mysql_free_result($todays_task);
+#    mysql_free_result($yesterdays_task);
 }
 
 
@@ -135,7 +125,7 @@ function print_tomorrows_task_table( $expand="0", $url="none" )  {
 
     echo "</table>\n";
 
-    mysql_free_result($result);
+#    mysql_free_result($tomorrows_tasks);
 }
 
 
@@ -153,7 +143,7 @@ function print_tasks_on_hold_table( $expand="0", $url="none" )  {
 
     echo "</table>\n";
 
-    mysql_free_result($result);
+#    mysql_free_result($tasks_on_hold);
 }
 
 
@@ -232,7 +222,8 @@ function print_new_project_field() {
 function check_submits( $mysubmit='none', $id=0, $importantstate='0' ) {
     if ( $mysubmit != 'none' && $id !=0 ) {
 
-        if ( $submit == 'Important' ) {
+        # Toggle importance
+        if ( $mysubmit == 'Important' ) {
             if ( $importantstate == 'n' ) {
                 $query = "update tasks set important='y' where id=$id";
             }
@@ -240,21 +231,65 @@ function check_submits( $mysubmit='none', $id=0, $importantstate='0' ) {
                 $query = "update tasks set important='n' where id=$id";
             }
             $result = mysql_query($query) or die('Query failed: ' . mysql_error());
-
-            reloadpage( $url );
+            $id = 0;
         }
 
-        if ( $submit == 'TaskDone' ) {
+        # Marking task as Done.
+        elseif ( $mysubmit == 'TaskDone' ) {
             $query = "update tasks set solved_date=CURDATE() where id=$id";
             $result = mysql_query($query) or die('Query failed: ' . mysql_error());
-
-            reloadpage( $url );
         }
+
+        #Getting task done today.
+        elseif ( $mysubmit == 'Today' ) {
+            $query = "update tasks set due_date=CURDATE() where id=$id";
+            $result = mysql_query($query) or die('Query failed: ' . mysql_error());
+            $id = 0;
+        }
+
+        # Getting task done tomorrow.
+        elseif ( $mysubmit == 'NextDay' ) {
+            $query = "update tasks set due_date=CURDATE()+1 where id=$id";
+            $result = mysql_query($query) or die('Query failed: ' . mysql_error());
+        }
+
+        # Toggle "On hold" status.
+        elseif ( $mysubmit == 'On_hold' ) {
+            $query = "select on_hold from tasks where id=$id";
+            $result = get_table( $query );
+
+            foreach ( $result as $j ) {
+                if ( $j['on_hold'] == 1 ) {
+                    $query = "update tasks set on_hold = NULL, due_date=CURDATE() where id=$id";
+                }
+                else {
+                    $query = "update tasks set on_hold='1' where id=$id";
+                }
+            }
+            $result = mysql_query($query) or die('Query failed: ' . mysql_error());
+            $id = 0;
+        }
+
+
     }
 }
 
 
 
 function db_close() {
-	mysql_close($dbconn);
+#	mysql_close($dbconn);
 }
+
+
+
+# Nice looking button. May never use it:
+#                     "<a class=\"button\" href=\"javascript:var URL = 'index.php?submit=On_hold&id=".$id."';" .
+#                     "window.opener.location.href = URL; window.close()\"><span>H</span></a></td>";
+
+
+# Opens a new window with a calendar.  For future use.
+            #echo "\t\t<td width=1><a href=\"javascript:void(0)\" onClick=\"".
+            #    "window.open('adjust_task.php?id=$j[id]','','toolbar=no,".
+            #    "directories=no, location=no, status=no, menubar=no, resizable=no,".
+            #    " scrollbars=no, width=1000, height=350,".
+            #    "tleft=300')\"><img src=\"images/settings.png\"></a></td>\n";
