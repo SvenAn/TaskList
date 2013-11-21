@@ -38,14 +38,14 @@ function print_notes() {
             echo "\t\t<td width=1><a href=\"notes.php\"><img src=\"images/Button-Reload-icon.png\"</a></td>\n";
             echo "\t\t<td width=1><a href=\"notes.php?submit=DeleteConfirmed&id=$j[id]\">".
                 "<img src=\"images/Delete-icon-big.png\"</a></td>\n";
-            $text = nl2br($j[text]);
+            $text = nl2br($j['text']);
             echo "<tr class=\"text\"><td></td><td></td><td colspan=\"3\">$text</td></tr>";
         }
         else {
             echo "<tr>";
             echo "\t\t<td width=1><a href=\"addnote.php?submit=edit&id=$j[id]\">".
                 "<img src=\"images/Edit.png\"</a></td>\n";
-            if ( $j[Expand] == '1' ) {
+            if ( $j['Expand'] == '1' ) {
                 echo "\t\t<td width=1><a href=\"notes.php?submit=Expand&id=$j[id]\">".
                     "<img src=\"images/Zoom-Out-icon.png\"</a></td>\n";
             }
@@ -58,8 +58,8 @@ function print_notes() {
             echo "\t\t<td width=1><a href=\"notes.php?submit=Delete&id=$j[id]\">".
                 "<img src=\"images/Delete-icon.png\"</a></td>\n";
             echo "\t</tr>\n";
-            if ( $j[Expand] == '1' ) {
-                $text = nl2br($j[text]);
+            if ( $j['Expand'] == '1' ) {
+                $text = nl2br($j['text']);
                 echo "<tr class=\"text\"><td></td><td></td><td colspan=\"2\">$text</td></tr>";
             }
         }

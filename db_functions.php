@@ -11,7 +11,7 @@ function db_connect() {
 }
 
 
-function print_tasks( $task, $alt, $expand, $url="none" ) {
+function print_tasks( $task, $alt, $expand, $url="none", $tabletype="today" ) {
     if ( $url == "none" ) { $url = $_SERVER['PHP_SELF']; }
 
     foreach ( $task as $j ) {
@@ -43,23 +43,29 @@ function print_tasks( $task, $alt, $expand, $url="none" ) {
                          "title='Get task done tomorrow'><img src=\"images/NextDay.gif\"></a>\n";
                 }
                 #Print "postpone until next week" button.
-                echo "\t\t<a href=\"".$url."?submit=NextWeek&id=$j[id]\" title='Get task done next week'><img src=\"images/NextWeek.gif\"></a>\n";
+                echo "\t\t<a href=\"javascript:void(0)\" onClick=\"loadXMLDoc('$url', $j[id], '&submit=NextWeek')\"" .
+                     "title='Postpone task until next monday'><img src=\"images/NextWeek.gif\"></a>\n";
                 #Put task on hold.
-                echo "\t\t<a href=\"?submit=On_hold&id=$j[id]\" title='Put task on Hold'><img src=\"images/Hold.png\"</a>\n";
+                echo "\t\t<a href=\"javascript:void(0)\" onClick=\"loadXMLDoc('$url', $j[id], '&submit=On_hold')\"" .
+                     "title='Put task on hold'><img src=\"images/Hold.png\"></a>\n";
             }
             else {
                 # Print "More options" button.
                 echo "\t\t<td width=1><a href=\"javascript:void(0)\" onClick=\"loadXMLDoc( '$url', $j[id], '')\" ".
                      "title='More options'><img src=\"images/Expand.png\"></a></td>\n";
                 # Get task done today... 
-                if ( $alt == 'yesterday' ) {
+                if ( $alt == 'yesterday' || $tabletype == 'tomorrow' ) {
                     echo "\t\t<td width=1><a href=\"javascript:void(0)\" onClick=\"loadXMLDoc( '$url', $j[id], '&submit=Today')\" ".
                          "title='Get task done today'><img src=\"images/Today.gif\"></a></td>\n";
                 }
                 # ...or tomorrow.
-                else {
+                elseif ( $tabletype == 'today' ) {
                     echo "\t\t<td width=1><a href=\"javascript:void(0)\" onClick=\"loadXMLDoc('$url', $j[id], '&submit=NextDay')\" " .
                          "title='Get task done tomorrow'><img src=\"images/NextDay.gif\"></a></td>\n";
+                }
+                elseif ( $tabletype == 'on_hold' ) {
+                    echo "\t\t<td width=1><a href=\"javascript:void(0)\" onClick=\"loadXMLDoc('$url', $j[id], '&submit=On_hold')\"" .
+                         "title='take task off hold'><img src=\"images/Hold.png\"></a></td>\n";
                 }
                 # Print task description.
                 echo "\t\t<td class=\"alt\">$j[task_description]</td>\n";
@@ -74,6 +80,8 @@ function print_tasks( $task, $alt, $expand, $url="none" ) {
 
 
 function get_table( $query ) {
+    $task = array();
+
     $result = mysql_query($query) or die('Query failed: ' . mysql_error());
     $num_rows = mysql_num_rows($result);
     $i = 0;
@@ -98,11 +106,12 @@ function print_today_task_table( $expand="0", $url="none" )  {
     echo "<table class=\"tasks\" width=\"100%\" height=\"100%\" align=\"center\">\n";
     echo "<tr><th colspan=\"5\">Tasks due today or earlier:</th></tr>\n";
 
-    print_tasks( $yesterdays_task, "important", $expand, $url );
-    print_tasks( $todays_task, "important", $expand, $url );
+#    if(is_array($task) && count($task) > 1) {
+    print_tasks( $yesterdays_task, "important", $expand, $url, "today" );
+    print_tasks( $todays_task, "important", $expand, $url, "today" );
 
-    print_tasks( $yesterdays_task, "yesterday", $expand, $url );
-    print_tasks( $todays_task, "none", $expand, $url );
+    print_tasks( $yesterdays_task, "yesterday", $expand, $url, "today" );
+    print_tasks( $todays_task, "none", $expand, $url, "today" );
 
     echo "</table>\n";
 
@@ -120,8 +129,8 @@ function print_tomorrows_task_table( $expand="0", $url="none" )  {
     echo "<table class=\"tasks\" width=\"100%\" height=\"100%\" align=\"center\">\n";
     echo "<tr><th colspan=\"5\">Tasks due tomorrow or later:</th></tr>\n";
 
-    print_tasks( $tomorrows_tasks, "important", $expand, $url );
-    print_tasks( $tomorrows_tasks, "none", $expand, $url );
+    print_tasks( $tomorrows_tasks, "important", $expand, $url, "tomorrow" );
+    print_tasks( $tomorrows_tasks, "none", $expand, $url, "tomorrow" );
 
     echo "</table>\n";
 
@@ -138,60 +147,12 @@ function print_tasks_on_hold_table( $expand="0", $url="none" )  {
     echo "<table class=\"tasks\" width=\"100%\" height=\"100%\" align=\"center\">\n";
     echo "<tr><th colspan=\"5\">Tasks on hold:</th></tr>\n";
 
-    print_tasks( $tasks_on_hold, "important", $expand, $url );
-    print_tasks( $tasks_on_hold, "none", $expand, $url );
+    print_tasks( $tasks_on_hold, "important", $expand, $url, "on_hold" );
+    print_tasks( $tasks_on_hold, "none", $expand, $url, "on_hold" );
 
     echo "</table>\n";
 
 #    mysql_free_result($tasks_on_hold);
-}
-
-
-function print_yesterdays_task_table()  {
-    $query = 'SELECT id,task_description,important FROM tasks where isnull(solved_date) and due_date<CURDATE()';
-    $result = mysql_query($query) or die('Query failed: ' . mysql_error());
-    $num_rows = mysql_num_rows($result);
-    $i = 0;
-    while ($row = mysql_fetch_row($result, MYSQL_ASSOC)) {
-        $task[$i] = $row;
-        $i++;
-    }
-
-    #Creating table header.
-    echo "<table class=\"tasks\" width=\"100%\" height=\"100%\" align=\"center\">\n";
-    echo "<th colspan=\"5\">Tasks due yesterday:</th>\n";
-
-    print_important_tasks( $task );
-
-    print_not_so_important_tasks( $task );
-
-    echo "</table>\n";
-
-    mysql_free_result($result);
-}
-
-
-function print_tomorrow_task_table()  {
-    $query = 'SELECT id,task_description,important FROM tasks where isnull(solved_date) and due_date>CURDATE()';
-    $result = mysql_query($query) or die('Query failed: ' . mysql_error());
-    $num_rows = mysql_num_rows($result);
-    $i = 0;
-    while ($row = mysql_fetch_row($result, MYSQL_ASSOC)) {
-        $task[$i] = $row;
-        $i++;
-    }
-
-    #Creating table header.
-    echo "<table class=\"tasks\" width=\"100%\" height=\"100%\" align=\"center\">\n";
-    echo "<th colspan=\"5\">Tasks due tomorrow:</th>\n";
-
-    print_important_tasks( $task );
-
-    print_not_so_important_tasks( $task );
-
-    echo "</table>\n";
-
-    mysql_free_result($result);
 }
 
 
@@ -249,7 +210,22 @@ function check_submits( $mysubmit='none', $id=0, $importantstate='0' ) {
 
         # Getting task done tomorrow.
         elseif ( $mysubmit == 'NextDay' ) {
-            $query = "update tasks set due_date=CURDATE()+1 where id=$id";
+            # calculates how many days to postpone the task to match next working day:
+            $weekday = date( "w" );
+            if ( $weekday == 5 ) { $days = 3; }
+            elseif ( $weekday == 6 ) { $days = 2; }
+            else { $days = 1; };
+
+            $query = "update tasks set due_date=CURDATE()+$days where id=$id";
+            $result = mysql_query($query) or die('Query failed: ' . mysql_error());
+        }
+
+        # Getting task done next monday.
+        elseif ( $mysubmit == 'NextWeek' ) {
+            # calculates how many days to postpone the task:
+            $days = 8 - date( "w" );
+            
+            $query = "update tasks set due_date=CURDATE()+$days where id=$id";
             $result = mysql_query($query) or die('Query failed: ' . mysql_error());
         }
 
@@ -267,10 +243,8 @@ function check_submits( $mysubmit='none', $id=0, $importantstate='0' ) {
                 }
             }
             $result = mysql_query($query) or die('Query failed: ' . mysql_error());
-            $id = 0;
         }
-
-
+        $id = 0;
     }
 }
 
