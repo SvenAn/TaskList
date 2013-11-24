@@ -25,12 +25,12 @@ function print_tasks( $task, $alt, $expand, $url="none", $tabletype="today" ) {
                 # Get task done today... 
                 if ( $alt == 'yesterday' ) {
                     echo "\t\t<td width=1><a href=\"javascript:void(0)\" onClick=\"loadXMLDoc( '$url', $j[id], '&submit=Today')\" ".
-                         "title='Get task done today'><img src=\"images/Today.gif\"></a>\n";
+                         "title='Get task done today'><img src=\"images/Up.png\"></a>\n";
                 }
                 # ...or tomorrow.
                 else {
                     echo "\t\t<td width=1><a href=\"javascript:void(0)\" onClick=\"loadXMLDoc('$url', $j[id], '&submit=NextDay')\"" .
-                         "title='Get task done tomorrow'><img src=\"images/NextDay.gif\"></a>\n";
+                         "title='Get task done tomorrow'><img src=\"images/NextDay.png\"></a>\n";
                 }
                 # Print "Importance" button.
                 echo "\t\t<a href=\"javascript:void(0)\" onClick=\"loadXMLDoc('$url', $j[id], '&submit=Important&state=$j[important]')\"" .
@@ -40,11 +40,11 @@ function print_tasks( $task, $alt, $expand, $url="none", $tabletype="today" ) {
                 # Print "postpone until tomorrow" button...
                 if ( $alt == 'yesterday' ) {
                     echo "\t\t<a href=\"javascript:void(0)\" onClick=\"loadXMLDoc('$url', $j[id], '&submit=NextDay')\"" .
-                         "title='Get task done tomorrow'><img src=\"images/NextDay.gif\"></a>\n";
+                         "title='Get task done tomorrow'><img src=\"images/NextDay.png\"></a>\n";
                 }
                 #Print "postpone until next week" button.
                 echo "\t\t<a href=\"javascript:void(0)\" onClick=\"loadXMLDoc('$url', $j[id], '&submit=NextWeek')\"" .
-                     "title='Postpone task until next monday'><img src=\"images/NextWeek.gif\"></a>\n";
+                     "title='Postpone task until next monday'><img src=\"images/NextWeek.png\"></a>\n";
                 #Put task on hold.
                 echo "\t\t<a href=\"javascript:void(0)\" onClick=\"loadXMLDoc('$url', $j[id], '&submit=On_hold')\"" .
                      "title='Put task on hold'><img src=\"images/Hold.png\"></a>\n";
@@ -56,12 +56,12 @@ function print_tasks( $task, $alt, $expand, $url="none", $tabletype="today" ) {
                 # Get task done today... 
                 if ( $alt == 'yesterday' || $tabletype == 'tomorrow' ) {
                     echo "\t\t<td width=1><a href=\"javascript:void(0)\" onClick=\"loadXMLDoc( '$url', $j[id], '&submit=Today')\" ".
-                         "title='Get task done today'><img src=\"images/Today.gif\"></a></td>\n";
+                         "title='Get task done today'><img src=\"images/Up.png\"></a></td>\n";
                 }
                 # ...or tomorrow.
                 elseif ( $tabletype == 'today' ) {
                     echo "\t\t<td width=1><a href=\"javascript:void(0)\" onClick=\"loadXMLDoc('$url', $j[id], '&submit=NextDay')\" " .
-                         "title='Get task done tomorrow'><img src=\"images/NextDay.gif\"></a></td>\n";
+                         "title='Get task done tomorrow'><img src=\"images/NextDay.png\"></a></td>\n";
                 }
                 elseif ( $tabletype == 'on_hold' ) {
                     echo "\t\t<td width=1><a href=\"javascript:void(0)\" onClick=\"loadXMLDoc('$url', $j[id], '&submit=On_hold')\"" .
