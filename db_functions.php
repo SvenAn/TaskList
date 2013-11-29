@@ -216,7 +216,8 @@ function check_submits( $mysubmit='none', $id=0, $importantstate='0' ) {
             elseif ( $weekday == 6 ) { $days = 2; }
             else { $days = 1; };
 
-            $query = "update tasks set due_date=CURDATE()+$days where id=$id";
+            #$query = "update tasks set due_date=CURDATE()+$days where id=$id";
+            $query = "update tasks set due_date=date(curdate() + interval $days day) where id=$id";
             $result = mysql_query($query) or die('Query failed: ' . mysql_error());
         }
 
@@ -225,7 +226,7 @@ function check_submits( $mysubmit='none', $id=0, $importantstate='0' ) {
             # calculates how many days to postpone the task:
             $days = 8 - date( "w" );
             
-            $query = "update tasks set due_date=CURDATE()+$days where id=$id";
+            $query = "update tasks set due_date=date(curdate() + interval $days day) where id=$id";
             $result = mysql_query($query) or die('Query failed: ' . mysql_error());
         }
 
