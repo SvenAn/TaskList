@@ -1,4 +1,4 @@
-<?
+<?php
 
 require("functions.php");
 require("db_functions.php");
@@ -14,14 +14,14 @@ if ( $id == '' ) {
 }
 
 
-function print_notes() {
+function print_notes( $dbconn ) {
     global $ConfirmDelete;
 
     $query = 'SELECT id,subject,text,Expand FROM notes';
-    $result = mysql_query($query) or die('Query failed: ' . mysql_error());
-    #$num_rows = mysql_num_rows($result);
+    $result = mysqli_query( $dbconn, $query ) or die( 'Query failed: ' . mysqli_error( $dbconn ) );
+
     $i = 0;
-    while ($row = mysql_fetch_row($result, MYSQL_ASSOC)) {
+    while ($row = mysqli_fetch_row( $result )) {
         $note[$i] = $row;
         $i++;
     }
@@ -31,35 +31,35 @@ function print_notes() {
     echo "<th colspan=\"5\">Notes:</th>\n";
 
     foreach ( $note as $j ) {
-        if ( $ConfirmDelete == "$j[id]" ) {
+        if ( $ConfirmDelete == "$j[0]" ) {
             echo "<tr class=\"important\"><td colspan=\"5\">Are you sure you want to delete this note?</td></tr>";
             echo "<tr class=\"important\">";
-            echo "\t\t<td colspan=\"3\">$j[subject]</td>\n";
+            echo "\t\t<td colspan=\"3\">$j[1]</td>\n";
             echo "\t\t<td width=1><a href=\"notes.php\"><img src=\"images/Button-Reload-icon.png\"</a></td>\n";
-            echo "\t\t<td width=1><a href=\"notes.php?submit=DeleteConfirmed&id=$j[id]\">".
+            echo "\t\t<td width=1><a href=\"notes.php?submit=DeleteConfirmed&id=$j[0]\">".
                 "<img src=\"images/Delete-icon-big.png\"</a></td>\n";
-            $text = nl2br($j['text']);
+            $text = nl2br($j[2]);
             echo "<tr class=\"text\"><td></td><td></td><td colspan=\"3\">$text</td></tr>";
         }
         else {
             echo "<tr>";
-            echo "\t\t<td width=1><a href=\"addnote.php?submit=edit&id=$j[id]\">".
+            echo "\t\t<td width=1><a href=\"addnote.php?submit=edit&id=$j[0]\">".
                 "<img src=\"images/Edit.png\"</a></td>\n";
-            if ( $j['Expand'] == '1' ) {
-                echo "\t\t<td width=1><a href=\"notes.php?submit=Expand&id=$j[id]\">".
+            if ( $j[3] == '1' ) {
+                echo "\t\t<td width=1><a href=\"notes.php?submit=Expand&id=$j[0]\">".
                     "<img src=\"images/Zoom-Out-icon.png\"</a></td>\n";
             }
             else {
-                echo "\t\t<td width=1><a href=\"notes.php?submit=Collapse&id=$j[id]\">".
+                echo "\t\t<td width=1><a href=\"notes.php?submit=Collapse&id=$j[0]\">".
                     "<img src=\"images/Zoom-In-icon.png\"</a></td>\n";
             }
-            echo "\t\t<td>$j[subject]</td>\n";
+            echo "\t\t<td>$j[1]</td>\n";
             echo "<td></td>";
-            echo "\t\t<td width=1><a href=\"notes.php?submit=Delete&id=$j[id]\">".
+            echo "\t\t<td width=1><a href=\"notes.php?submit=Delete&id=$j[0]\">".
                 "<img src=\"images/Delete-icon.png\"</a></td>\n";
             echo "\t</tr>\n";
-            if ( $j['Expand'] == '1' ) {
-                $text = nl2br($j['text']);
+            if ( $j[3] == '1' ) {
+                $text = nl2br($j[2]);
                 echo "<tr class=\"text\"><td></td><td></td><td colspan=\"2\">$text</td></tr>";
             }
         }
@@ -68,14 +68,14 @@ function print_notes() {
     echo "<br><br>";
     echo "<a class=\"button\" href=\"addnote.php\"><span>Add new note</span></a>";
 
-    mysql_free_result($result);
+    mysqli_free_result($result);
 }
 
 
 
 html_top('notes');
 
-db_connect();
+$dbconn = db_connect();
 
 if ( $subject ) {
 	if ( $id == 'new' ) {
@@ -85,17 +85,16 @@ if ( $subject ) {
 		$query = "update notes set subject='$subject', text='$text' where id=$id";
 	}
 
-	$result = mysql_query($query) or die('Query failed: ' . mysql_error());
+	$result = mysqli_query( $dbconn, $query ) or die( 'Query failed: ' . mysql_error( $dbconn ) );
 }
-
 elseif ( $submit == 'Expand' ) {
 	$query = "update notes set Expand=0 where id=$id";
-	$result = mysql_query($query) or die('Query failed: ' . mysql_error());
+	$result = mysqli_query( $dbconn, $query) or die( 'Query failed: ' . mysql_error( $dbconn ) );
 
 }
 elseif ( $submit == 'Collapse' ) {
 	$query = "update notes set Expand=1 where id=$id";
-	$result = mysql_query($query) or die('Query failed: ' . mysql_error());
+	$result = mysqli_query( $dbconn, $query) or die( 'Query failed: ' . mysql_error( $dbconn ) );
 }
 elseif ( $submit == 'Delete' ) {
 	$ConfirmDelete = $id;
@@ -103,13 +102,9 @@ elseif ( $submit == 'Delete' ) {
 }
 elseif ( $submit == 'DeleteConfirmed' ) {
 	$query = "delete from notes where id=$id";
-	$result = mysql_query($query) or die('Query failed: ' . mysql_error());
+	$result = mysqli_query( $dbconn, $query) or die( 'Query failed: ' . mysql_error( $dbconn ) );
 }
 
-print_notes();
+print_notes( $dbconn );
 
 db_close();
-
-html_bottom();
-?>
-

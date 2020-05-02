@@ -1,4 +1,4 @@
-<?
+<?php
 
 require("functions.php");
 require("db_functions.php");
@@ -17,15 +17,6 @@ db_connect();
 	<link href="style.css" rel="stylesheet" type="text/css" />
 	<link href="table.css" rel="stylesheet" type="text/css" />
 	<link href="button.css" rel="stylesheet" type="text/css" />
-	<!--[if IE]>te
-		<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-	<![endif]-->
-	<!--[if IE 6]>
-		<script src="../js/belatedPNG.js"></script>
-		<script>
-			DD_belatedPNG.fix('*');
-		</script>
-	<![endif]-->
 
 <section id="contentwrap">
 	<div id="contents">
@@ -45,12 +36,12 @@ for ( $i=$today+1; $i<=$days_this_month; $i++ ) {
         $days[$i] = array('index.php','linked-day');
 }
 
-print_task_description( $id );
+#print_task_description( $id );
 
-echo "<table class=\"task\"><tr><th>Header</th></tr>";
+echo "<table class=\"task\" align=\"center\"><tr><th colspan=\"3\">Please select when the task is due to be finished.<br><br></th></tr>";
 echo "<tr><td>";
 echo generate_calendar(date('Y', $time), date('n', $time), $days); 
-echo "</td>";
+echo "</td> <td width='30'></td>";
 for ( $i=1; $i<=$days_next_month; $i++ ) {
         $days[$i] = array('index.php','linked-day');
 }
@@ -62,7 +53,7 @@ echo "</div>";
 
 echo "<tr><td>";
 #echo "<a class=\"button\" href='index.php?submit=On_hold&id=".$id."'><span>Put this task on hold for now</span></a>";
-echo "<a class=\"button\" href=\"javascript:var URL = 'index.php?submit=On_hold&id=".$id."';window.opener.location.href = URL; window.close()\"><span>Put this task on hold for now</span></a>";
+#echo "<a class=\"button\" href=\"javascript:var URL = 'index.php?submit=On_hold&id=".$id."';window.opener.location.href = URL; window.close()\"><span>Put this task on hold for now</span></a>";
 
 echo "</td></tr>";
 echo "</table>";

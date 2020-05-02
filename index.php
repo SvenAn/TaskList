@@ -1,4 +1,4 @@
-<?
+<?php
 
 require("functions.php");
 require("db_functions.php");
@@ -14,18 +14,17 @@ $state = filter_input(INPUT_GET,'state', FILTER_SANITIZE_STRING);
 $table = filter_input(INPUT_GET,'table', FILTER_SANITIZE_STRING);
 
 
-db_connect();
 
 
 if ( $newtask ) {
+	$dbconn = db_connect();
 	$query = "insert into tasks (created_date, due_date, task_description) values ( curdate(), curdate(), '$newtask')";
-	$result = mysql_query($query) or die('Query failed: ' . mysql_error());
+	$result = mysqli_query($dbconn, $query) or die('Query failed: ' . mysqli_error($dbconn));
 
 	reloadpage( $url );
 }
 
 check_submits( $submit, $id, $state );
-
 
 
 if ( ! $table ) {

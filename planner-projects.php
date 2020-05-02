@@ -1,4 +1,4 @@
-<?
+<?php
 
 require("functions.php");
 require("db_functions.php");
